@@ -5,14 +5,18 @@ Entry Point
 
 from datetime import datetime
 
+from .orchestrator import Orchestrator
+
 
 class AlHoffCore:
 
     def __init__(self):
         self.name = "AlHoff Core"
         self.version = "0.1.0"
+        self.orchestrator = Orchestrator()
 
     def start(self):
+        self.orchestrator.start()
         print("=" * 50)
         print(self.name)
         print("=" * 50)
