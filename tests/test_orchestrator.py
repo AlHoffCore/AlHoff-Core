@@ -90,6 +90,50 @@ class TestOrchestrator(unittest.TestCase):
 
         self.assertEqual(orchestrator.list_task_results(), ())
 
+    def test_get_task_result_returns_none_for_empty_history(self):
+        orchestrator = Orchestrator()
+
+        self.assertIsNone(orchestrator.get_task_result("unknown"))
+
+    def test_get_task_result_returns_stored_instance(self):
+        orchestrator = Orchestrator()
+        orchestrator.agent_registry.register("test-agent", TestAgent())
+        result = orchestrator.run_task(Task("test-agent", "test-task"))
+
+        stored_result = orchestrator.get_task_result(result.task_id)
+
+        self.assertIs(stored_result, result)
+
+    def test_get_task_result_finds_correct_result(self):
+        orchestrator = Orchestrator()
+        orchestrator.agent_registry.register("test-agent", TestAgent())
+        first_result = orchestrator.run_task(Task("test-agent", "first"))
+        second_result = orchestrator.run_task(Task("test-agent", "second"))
+
+        self.assertIs(
+            orchestrator.get_task_result(first_result.task_id),
+            first_result,
+        )
+        self.assertIs(
+            orchestrator.get_task_result(second_result.task_id),
+            second_result,
+        )
+
+    def test_get_task_result_does_not_change_history(self):
+        orchestrator = Orchestrator()
+        orchestrator.agent_registry.register("test-agent", TestAgent())
+        first_result = orchestrator.run_task(Task("test-agent", "first"))
+        second_result = orchestrator.run_task(Task("test-agent", "second"))
+        history_before = orchestrator.list_task_results()
+
+        self.assertIsNone(orchestrator.get_task_result("unknown"))
+        orchestrator.get_task_result(first_result.task_id)
+
+        history_after = orchestrator.list_task_results()
+        self.assertEqual(history_after, history_before)
+        self.assertIs(history_after[0], first_result)
+        self.assertIs(history_after[1], second_result)
+
 
 if __name__ == "__main__":
     unittest.main()

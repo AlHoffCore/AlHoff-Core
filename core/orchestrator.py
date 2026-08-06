@@ -39,3 +39,10 @@ class Orchestrator:
 
     def list_task_results(self):
         return tuple(self._task_results)
+
+    def get_task_result(self, task_id):
+        for result in self._task_results:
+            if result.task_id == task_id:
+                return result
+
+        return None

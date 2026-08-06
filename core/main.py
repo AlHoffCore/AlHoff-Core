@@ -38,6 +38,9 @@ class AlHoffCore:
     def list_task_results(self):
         return self.orchestrator.list_task_results()
 
+    def get_task_result(self, task_id):
+        return self.orchestrator.get_task_result(task_id)
+
 
 if __name__ == "__main__":
     core = AlHoffCore()

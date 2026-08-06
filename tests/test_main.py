@@ -69,6 +69,14 @@ class TestAlHoffCore(unittest.TestCase):
         self.assertIs(history[0], first_result)
         self.assertIs(history[1], second_result)
 
+    def test_get_task_result_returns_stored_instance(self):
+        core = AlHoffCore()
+        result = core.run_task(Task("echo", "test-task"))
+
+        stored_result = core.get_task_result(result.task_id)
+
+        self.assertIs(stored_result, result)
+
 
 if __name__ == "__main__":
     unittest.main()
