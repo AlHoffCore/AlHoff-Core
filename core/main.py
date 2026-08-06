@@ -5,6 +5,8 @@ Entry Point
 
 from datetime import datetime
 
+from agents.echo_agent import EchoAgent
+
 from .orchestrator import Orchestrator
 
 
@@ -14,6 +16,7 @@ class AlHoffCore:
         self.name = "AlHoff Core"
         self.version = "0.1.0"
         self.orchestrator = Orchestrator()
+        self.orchestrator.agent_registry.register("echo", EchoAgent())
 
     def start(self):
         self.orchestrator.start()
