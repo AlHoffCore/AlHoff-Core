@@ -32,6 +32,9 @@ class AlHoffCore:
     def run_agent(self, name, task):
         return self.orchestrator.run_agent(name, task)
 
+    def run_task(self, task):
+        return self.orchestrator.run_task(task)
+
 
 if __name__ == "__main__":
     core = AlHoffCore()

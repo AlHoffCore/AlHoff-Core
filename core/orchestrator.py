@@ -1,4 +1,5 @@
 from .agent_registry import AgentRegistry
+from .task import Task
 
 
 class Orchestrator:
@@ -19,3 +20,9 @@ class Orchestrator:
             raise TypeError("Agent run method is not callable")
 
         return agent.run(task)
+
+    def run_task(self, task):
+        if not isinstance(task, Task):
+            raise TypeError("task must be a Task instance")
+
+        return self.run_agent(task.agent_name, task.payload)
