@@ -31,9 +31,15 @@ class TestAlHoffCore(unittest.TestCase):
         core = AlHoffCore()
         task = {"message": "diagnostic"}
 
-        result = core.orchestrator.run_agent("echo", task)
+        result = core.run_agent("echo", task)
 
         self.assertIs(result, task)
+
+    def test_unknown_agent_raises_key_error(self):
+        core = AlHoffCore()
+
+        with self.assertRaises(KeyError):
+            core.run_agent("unknown", "test-task")
 
 
 if __name__ == "__main__":

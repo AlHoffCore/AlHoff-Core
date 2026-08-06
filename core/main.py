@@ -29,6 +29,9 @@ class AlHoffCore:
         print("Core erfolgreich gestartet.")
         print()
 
+    def run_agent(self, name, task):
+        return self.orchestrator.run_agent(name, task)
+
 
 if __name__ == "__main__":
     core = AlHoffCore()
