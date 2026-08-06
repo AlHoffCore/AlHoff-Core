@@ -4,6 +4,7 @@ from io import StringIO
 
 from agents.echo_agent import EchoAgent
 from core.main import AlHoffCore
+from core.task import Task
 
 
 class TestAlHoffCore(unittest.TestCase):
@@ -40,6 +41,33 @@ class TestAlHoffCore(unittest.TestCase):
 
         with self.assertRaises(KeyError):
             core.run_agent("unknown", "test-task")
+
+    def test_new_core_has_empty_task_result_history(self):
+        core = AlHoffCore()
+
+        history = core.list_task_results()
+
+        self.assertIsInstance(history, tuple)
+        self.assertEqual(history, ())
+
+    def test_successful_task_is_stored_as_same_result_instance(self):
+        core = AlHoffCore()
+
+        result = core.run_task(Task("echo", "test-task"))
+        history = core.list_task_results()
+
+        self.assertEqual(len(history), 1)
+        self.assertIs(history[0], result)
+
+    def test_task_result_history_preserves_execution_order(self):
+        core = AlHoffCore()
+
+        first_result = core.run_task(Task("echo", "first"))
+        second_result = core.run_task(Task("echo", "second"))
+        history = core.list_task_results()
+
+        self.assertIs(history[0], first_result)
+        self.assertIs(history[1], second_result)
 
 
 if __name__ == "__main__":
