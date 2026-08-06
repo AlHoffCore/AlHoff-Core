@@ -3,6 +3,7 @@ from dataclasses import FrozenInstanceError
 
 from core.main import AlHoffCore
 from core.task import Task
+from core.task_result import TaskResult
 
 
 class TestTask(unittest.TestCase):
@@ -35,14 +36,17 @@ class TestTask(unittest.TestCase):
         ):
             Task(123, "diagnostic")
 
-    def test_echo_task_returns_exact_same_payload(self):
+    def test_echo_task_returns_task_result(self):
         core = AlHoffCore()
         payload = {"message": "diagnostic"}
         task = Task("echo", payload)
 
         result = core.run_task(task)
 
-        self.assertIs(result, payload)
+        self.assertIsInstance(result, TaskResult)
+        self.assertEqual(result.agent_name, "echo")
+        self.assertIs(result.payload, payload)
+        self.assertIs(result.output, payload)
 
     def test_unknown_agent_raises_key_error(self):
         core = AlHoffCore()

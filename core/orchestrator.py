@@ -1,5 +1,6 @@
 from .agent_registry import AgentRegistry
 from .task import Task
+from .task_result import TaskResult
 
 
 class Orchestrator:
@@ -25,4 +26,5 @@ class Orchestrator:
         if not isinstance(task, Task):
             raise TypeError("task must be a Task instance")
 
-        return self.run_agent(task.agent_name, task.payload)
+        output = self.run_agent(task.agent_name, task.payload)
+        return TaskResult(task.agent_name, task.payload, output)
