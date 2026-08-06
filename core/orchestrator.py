@@ -28,7 +28,12 @@ class Orchestrator:
             raise TypeError("task must be a Task instance")
 
         output = self.run_agent(task.agent_name, task.payload)
-        result = TaskResult(task.agent_name, task.payload, output)
+        result = TaskResult(
+            task.agent_name,
+            task.payload,
+            output,
+            task.task_id,
+        )
         self._task_results.append(result)
         return result
 

@@ -6,3 +6,4 @@ class TaskResult:
     agent_name: str
     payload: object
     output: object
+    task_id: str

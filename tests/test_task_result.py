@@ -10,14 +10,20 @@ class TestTaskResult(unittest.TestCase):
         payload = {"message": "diagnostic"}
         output = ["completed"]
 
-        result = TaskResult("echo", payload, output)
+        result = TaskResult("echo", payload, output, "task-123")
 
         self.assertEqual(result.agent_name, "echo")
+        self.assertEqual(result.task_id, "task-123")
         self.assertIs(result.payload, payload)
         self.assertIs(result.output, output)
 
     def test_task_result_is_immutable(self):
-        result = TaskResult("echo", "diagnostic", "completed")
+        result = TaskResult(
+            "echo",
+            "diagnostic",
+            "completed",
+            "task-123",
+        )
 
         with self.assertRaises(FrozenInstanceError):
             result.output = "changed"

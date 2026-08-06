@@ -15,6 +15,14 @@ class TestTask(unittest.TestCase):
 
         self.assertEqual(task.agent_name, "echo")
         self.assertIs(task.payload, payload)
+        self.assertIsInstance(task.task_id, str)
+        self.assertTrue(task.task_id)
+
+    def test_different_tasks_have_different_ids(self):
+        first_task = Task("echo", "first")
+        second_task = Task("echo", "second")
+
+        self.assertNotEqual(first_task.task_id, second_task.task_id)
 
     def test_task_is_immutable(self):
         task = Task("echo", "diagnostic")
@@ -45,6 +53,7 @@ class TestTask(unittest.TestCase):
 
         self.assertIsInstance(result, TaskResult)
         self.assertEqual(result.agent_name, "echo")
+        self.assertEqual(result.task_id, task.task_id)
         self.assertIs(result.payload, payload)
         self.assertIs(result.output, payload)
 
