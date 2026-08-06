@@ -8,6 +8,7 @@ class Orchestrator:
     def __init__(self):
         self.status = "initialized"
         self.agent_registry = AgentRegistry()
+        self._task_results = []
 
     def start(self):
         self.status = "running"
@@ -27,4 +28,9 @@ class Orchestrator:
             raise TypeError("task must be a Task instance")
 
         output = self.run_agent(task.agent_name, task.payload)
-        return TaskResult(task.agent_name, task.payload, output)
+        result = TaskResult(task.agent_name, task.payload, output)
+        self._task_results.append(result)
+        return result
+
+    def list_task_results(self):
+        return tuple(self._task_results)
