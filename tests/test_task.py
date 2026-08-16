@@ -1,5 +1,6 @@
 import unittest
 from dataclasses import FrozenInstanceError
+from datetime import datetime, timezone
 
 from core.main import AlHoffCore
 from core.task import Task
@@ -17,12 +18,16 @@ class TestTask(unittest.TestCase):
         self.assertIs(task.payload, payload)
         self.assertIsInstance(task.task_id, str)
         self.assertTrue(task.task_id)
+        self.assertIsInstance(task.created_at, datetime)
+        self.assertEqual(task.created_at.tzinfo, timezone.utc)
 
     def test_different_tasks_have_different_ids(self):
         first_task = Task("echo", "first")
         second_task = Task("echo", "second")
 
         self.assertNotEqual(first_task.task_id, second_task.task_id)
+        self.assertIsNot(first_task.created_at, second_task.created_at)
+        self.assertLessEqual(first_task.created_at, second_task.created_at)
 
     def test_task_is_immutable(self):
         task = Task("echo", "diagnostic")
@@ -56,6 +61,7 @@ class TestTask(unittest.TestCase):
         self.assertEqual(result.task_id, task.task_id)
         self.assertIs(result.payload, payload)
         self.assertIs(result.output, payload)
+        self.assertGreaterEqual(result.completed_at, task.created_at)
 
     def test_unknown_agent_raises_key_error(self):
         core = AlHoffCore()

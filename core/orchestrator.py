@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from .agent_registry import AgentRegistry
 from .task import Task
 from .task_result import TaskResult
@@ -28,11 +30,13 @@ class Orchestrator:
             raise TypeError("task must be a Task instance")
 
         output = self.run_agent(task.agent_name, task.payload)
+        completed_at = datetime.now(timezone.utc)
         result = TaskResult(
             task.agent_name,
             task.payload,
             output,
             task.task_id,
+            completed_at,
         )
         self._task_results.append(result)
         return result
